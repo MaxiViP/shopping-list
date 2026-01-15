@@ -1,8 +1,16 @@
 <template>
-	<div class="min-h-screen bg-gray-100 p-4">
+	<div class="min-h-screen bg-gray-100 p-2">
 		<div class="flex justify-between items-center mb-6">
 			<h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">Список покупок</h1>
-			<router-link to="/history">История покупок</router-link>
+			<router-link
+				to="/history"
+				class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg transition-colors flex items-center gap-2"
+				title="История покупок"
+			>
+				<font-awesome-icon icon="history" />
+				<span class="hidden sm:inline">История покупок</span>
+				<span class="sm:hidden">История</span>
+			</router-link>
 			<div class="flex items-center gap-4">
 				<span class="text-gray-600 hidden sm:block"> Привет, {{ userStore.currentUser?.username }}! </span>
 				<button
@@ -81,12 +89,13 @@
 							<li
 								v-for="id in favorites"
 								:key="id"
-								class="p-2 sm:p-3 md:p-4 hover:bg-red-50 flex justify-between items-center rounded"
+								@click="addFavoriteToWishlist(id)"
+								class="p-2 sm:p-3 md:p-4 hover:bg-red-50 flex justify-between items-center rounded cursor-pointer"
 							>
 								<span class="flex-1 text-sm sm:text-base md:text-lg">
 									{{ getProductNameById(id) }}
 								</span>
-								<div class="flex gap-2">
+								<div class="flex gap-2" @click.stop>
 									<button
 										@click="addFavoriteToWishlist(id)"
 										class="text-green-600 hover:text-green-800 p-1 sm:p-2 md:p-2 rounded"
@@ -132,12 +141,13 @@
 					<li
 						v-for="i in wishlist"
 						:key="i.id"
-						class="p-2 sm:p-3 md:p-4 hover:bg-blue-50 flex justify-between items-center rounded break-words"
+						@click="moveToCart(i.id)"
+						class="p-2 sm:p-3 md:p-4 hover:bg-blue-50 flex justify-between items-center rounded break-words cursor-pointer"
 					>
 						<span class="flex-1 text-sm sm:text-base md:text-lg truncate">
 							{{ i.name }}
 						</span>
-						<div class="flex gap-2 flex-shrink-0">
+						<div class="flex gap-2 flex-shrink-0" @click.stop>
 							<button
 								@click="moveToCart(i.id)"
 								class="text-green-600 hover:text-green-800 p-1 sm:p-2 md:p-2 rounded"
@@ -198,52 +208,45 @@
 			</div>
 		</div>
 
-<!-- Форма добавления информации о покупке -->
-<div class="bg-white rounded-xl shadow p-4 mt-4 max-w-6xl mx-auto">
-  <h3 class="text-lg font-semibold mb-4">Добавить информацию о покупке</h3>
+		<!-- Форма добавления информации о покупке -->
+		<div class="bg-white rounded-xl shadow p-4 mt-4 max-w-6xl mx-auto">
+			<h3 class="text-lg font-semibold mb-4">Добавить информацию о покупке</h3>
 
-  <form
-    @submit.prevent="savePurchase"
-    class="flex flex-col sm:flex-row sm:items-center gap-3"
-  >
-    <!-- Магазин -->
-    <input
-      v-model="purchaseStore"
-      placeholder="Магазин"
-      class="flex-1 border p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-    />
+			<form @submit.prevent="savePurchase" class="flex flex-col sm:flex-row sm:items-center gap-3">
+				<!-- Магазин -->
+				<input
+					v-model="purchaseStore"
+					placeholder="Магазин"
+					class="flex-1 border p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+				/>
 
-    <!-- Сумма -->
-    <input
-      v-model.number="purchaseAmount"
-      type="number"
-      placeholder="Сумма (руб.)"
-      class="w-full sm:w-32 border p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-      min="0"
-    />
+				<!-- Сумма -->
+				<input
+					v-model.number="purchaseAmount"
+					type="number"
+					placeholder="Сумма (руб.)"
+					class="w-full sm:w-32 border p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+					min="0"
+				/>
 
-    <!-- Кнопка сохранения -->
-    <button
-      type="submit"
-      class="bg-green-500 text-white px-4 py-3 rounded hover:bg-green-600 transition-colors"
-    >
-      Сохранить покупку
-    </button>
-  </form>
-</div>
-
+				<!-- Кнопка сохранения -->
+				<button type="submit" class="bg-green-500 text-white px-4 py-3 rounded hover:bg-green-600 transition-colors">
+					Сохранить покупку
+				</button>
+			</form>
+		</div>
 
 		<!-- Категории -->
-		<div class="bg-white p-6 rounded-xl shadow max-w-6xl mx-auto">
+		<div class="bg-white p-2 rounded-xl shadow max-w-6xl mx-auto">
 			<h2 class="text-xl font-semibold mb-4">Категории товаров</h2>
 
 			<div v-if="!selectedCategory">
-				<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+				<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1">
 					<button
 						v-for="cat in categories"
 						:key="cat"
 						@click="selectedCategory = cat"
-						class="p-4 bg-gray-100 hover:bg-blue-100 rounded-lg transition-colors text-center"
+						class="p-2 bg-gray-100 hover:bg-blue-100 rounded-lg transition-colors text-center"
 					>
 						{{ cat }}
 					</button>
@@ -264,7 +267,8 @@
 						v-for="p in productsByCategory"
 						:key="p.id"
 						@click="addToWishlist(p)"
-						class="p-3 bg-gray-50 hover:bg-blue-50 rounded-lg flex justify-between items-center cursor-pointer"
+						class="p-3 rounded-lg flex justify-between items-center cursor-pointer transition-colors"
+						:class="isInWishlist(p.id) ? 'bg-green-100 hover:bg-green-200' : 'bg-gray-50 hover:bg-blue-50'"
 					>
 						<span>{{ p.name }}</span>
 						<button @click.stop="toggleFavorite(p.id)" class="ml-4">
@@ -281,7 +285,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProductStore } from '@/stores/productStore'
 import { useRouter } from 'vue-router'
@@ -314,7 +318,7 @@ function savePurchase() {
 	purchaseAmount.value = 0
 }
 
-const favoritesOpen = ref(true)
+const favoritesOpen = ref(false)
 
 const {
 	searchQuery,
@@ -332,6 +336,15 @@ const { addToWishlist, moveToCart, toggleFavorite, moveFromCartToWishlist } = pr
 
 const getProductNameById = id => allProducts.value.find(p => p.id === id)?.name || 'Не найдено'
 
+const wishlistItemIds = computed(() => {
+	return wishlist.value.map(item => item.id)
+})
+
+// Добавьте эту функцию - она будет правильно проверять наличие товара в wishlist
+const isInWishlist = productId => {
+	return wishlistItemIds.value.includes(productId)
+}
+
 // Функция для добавления избранного в список желаний
 const addFavoriteToWishlist = productId => {
 	const product = allProducts.value.find(p => p.id === productId)
@@ -346,8 +359,7 @@ function selectProduct(product) {
 }
 
 function handleFavoriteClick(productId) {
-  toggleFavorite(productId) // добавляем/удаляем из избранного
-  searchQuery.value = ''     // скрываем результаты поиска
+	toggleFavorite(productId) // добавляем/удаляем из избранного
+	searchQuery.value = '' // скрываем результаты поиска
 }
-
 </script>
