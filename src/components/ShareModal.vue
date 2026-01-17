@@ -10,7 +10,7 @@
 				class="absolute -top-3 -right-3 bg-gray-800 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-900 transition-colors z-10"
 				title="Закрыть"
 			>
-				<font-awesome-icon icon="times" class="text-sm" />X
+				<font-awesome-icon icon="times" class="text-sm" />
 			</button>
 
 			<div class="flex justify-between items-center mb-4">
