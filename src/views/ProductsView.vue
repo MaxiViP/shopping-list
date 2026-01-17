@@ -82,6 +82,8 @@ import ShareModal from '@/components/ShareModal.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
+
+ 
 const productStore = useProductStore()
 
 // Обработчики

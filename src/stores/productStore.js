@@ -83,9 +83,10 @@ export const useProductStore = defineStore('products', () => {
 	})
 
 	const filteredProducts = computed(() => {
-		const query = searchQuery.value.trim().toLowerCase()
+		// Безопасная проверка на строку
+		const query = searchQuery.value ? String(searchQuery.value).trim().toLowerCase() : ''
 		if (!query) return []
-		return allProducts.value.filter(p => p.name?.toLowerCase().startsWith(query)).slice(0, 50)
+		return allProducts.value.filter(p => p.name && p.name.toLowerCase().startsWith(query)).slice(0, 50)
 	})
 
 	const productsByCategory = computed(() => {
