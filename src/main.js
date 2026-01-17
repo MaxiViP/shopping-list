@@ -26,6 +26,9 @@ import {
 	faArrowLeft,
 	faPaperPlane,
 	faEnvelope,
+	faSpinner, // ДОБАВИЛИ
+	faCopy, // ДОБАВИЛИ для копирования
+	faQrcode, // ДОБАВИЛИ для QR кода
 } from '@fortawesome/free-solid-svg-icons'
 
 // Регистрируем ВСЕ используемые иконки
@@ -47,13 +50,18 @@ library.add(
 	faCheckCircle,
 	faArrowLeft,
 	faPaperPlane,
-	faEnvelope
+	faEnvelope,
+	faSpinner,
+	faCopy,
+	faQrcode
 )
 
 const app = createApp(App)
 
 app.component('font-awesome-icon', FontAwesomeIcon)
-app.use(createPinia())
+
+const pinia = createPinia()
+app.use(pinia)
 app.use(router)
 
 app.mount('#app')

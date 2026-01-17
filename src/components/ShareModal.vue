@@ -45,6 +45,7 @@
 					Telegram
 				</button>
 			</div>
+			<img v-if="qrCodeUrl" :src="qrCodeUrl" alt="QR Code" />
 		</div>
 	</div>
 </template>
@@ -53,6 +54,7 @@
 defineProps({
 	show: Boolean,
 	shareLink: String,
+	qrCodeUrl: String,
 })
 
 defineEmits(['close', 'copy-to-clipboard', 'share-by-email', 'share-to-telegram'])
