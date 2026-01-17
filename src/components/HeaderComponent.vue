@@ -1,10 +1,10 @@
 <template>
-	<header 
+	<header
 		ref="header"
 		:class="[
-			'sticky top-0 z-40 bg-white p-4 transition-transform duration-300',
+			'sticky top-0 z-40  bg-gray-200 p-4 mb-4  transition-transform duration-300 border-b border-gray-700',
 			isHeaderHidden ? '-translate-y-full' : 'translate-y-0',
-			isScrolled ? 'shadow-md' : ''
+			isScrolled ? 'shadow-md' : '',
 		]"
 	>
 		<div class="flex items-center justify-between">
@@ -12,24 +12,22 @@
 			<div class="flex items-center gap-3 sm:gap-4 min-w-0">
 				<!-- Логотип -->
 				<div class="flex-shrink-0">
-					<img 
-						src="@/assets/logo.png" 
+					<img
+						src="@/assets/logo.png"
 						alt="Логотип Список покупок"
 						:class="[
 							'object-contain transition-all duration-200',
-							isHeaderHidden ? 'h-7 w-7' : 'h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11'
+							isHeaderHidden ? 'h-7 w-7' : 'h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11',
 						]"
 					/>
 				</div>
-				
+
 				<!-- Название приложения - скрываем на очень маленьких экранах -->
-				<h1 
+				<h1
 					:class="[
 						'font-bold text-gray-800 truncate',
-						isHeaderHidden 
-							? 'text-lg hidden sm:block' 
-							: 'text-xl sm:text-2xl md:text-3xl',
-						'hidden xs:block'  // Скрываем на экранах < 420px
+						isHeaderHidden ? 'text-lg hidden sm:block' : 'text-xl sm:text-2xl md:text-3xl',
+						'hidden xs:block', // Скрываем на экранах < 420px
 					]"
 				>
 					Список покупок
@@ -43,7 +41,7 @@
 					:class="[
 						'bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center gap-2 flex-shrink-0',
 						isHeaderHidden ? 'px-2 py-1 text-sm' : 'px-3 py-2 sm:px-4 sm:py-2',
-						isVerySmallScreen ? 'px-2 py-1 text-xs' : ''
+						isVerySmallScreen ? 'px-2 py-1 text-xs' : '',
 					]"
 					title="История покупок"
 				>
@@ -51,46 +49,37 @@
 					<span class="hidden sm:inline">История покупок</span>
 					<span class="sm:hidden">История</span>
 				</router-link>
-				
-				<span 
-					v-if="!isHeaderHidden"
-					class="text-gray-600 hidden sm:block flex-shrink-0 whitespace-nowrap"
-				>
-					Привет, {{ userStore.currentUser?.username }}! 
+
+				<span v-if="!isHeaderHidden" class="text-gray-600 hidden sm:block flex-shrink-0 whitespace-nowrap">
+					Привет, {{ userStore.currentUser?.username }}!
 				</span>
-				
+
 				<button
 					@click="$emit('logout')"
 					:class="[
 						'bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors flex-shrink-0',
 						isHeaderHidden ? 'px-2 py-1 text-xs' : 'px-2 sm:px-3 py-1 text-sm',
-						isVerySmallScreen ? 'px-1.5 py-0.5 text-xs' : ''
+						isVerySmallScreen ? 'px-1.5 py-0.5 text-xs' : '',
 					]"
 					title="Выйти"
 				>
 					<span class="hidden sm:inline">Выйти</span>
-					<font-awesome-icon 
-						icon="sign-out-alt" 
-						:class="[
-							isHeaderHidden ? '' : 'sm:hidden',
-							isVerySmallScreen ? 'text-sm' : ''
-						]" 
+					<font-awesome-icon
+						icon="sign-out-alt"
+						:class="[isHeaderHidden ? '' : 'sm:hidden', isVerySmallScreen ? 'text-sm' : '']"
 					/>
 				</button>
 			</div>
 		</div>
-		
+
 		<!-- Индикатор прокрутки -->
 		<div v-if="isScrolled && !isHeaderHidden" class="mt-2">
 			<div class="h-1 bg-blue-200 rounded-full overflow-hidden">
-				<div 
-					:style="{ width: scrollProgress + '%' }" 
-					class="h-full bg-blue-500 transition-all duration-200"
-				></div>
+				<div :style="{ width: scrollProgress + '%' }" class="h-full bg-blue-500 transition-all duration-200"></div>
 			</div>
 		</div>
 	</header>
-	
+
 	<!-- Кнопка "Наверх" при скрытом хедере -->
 	<button
 		v-if="isHeaderHidden && isScrolled"
@@ -127,20 +116,20 @@ const isVerySmallScreen = computed(() => {
 
 const handleScroll = () => {
 	const currentScroll = window.pageYOffset || document.documentElement.scrollTop
-	
+
 	// Рассчитываем прогресс прокрутки
 	const totalHeight = document.documentElement.scrollHeight - window.innerHeight
 	if (totalHeight > 0) {
 		scrollProgress.value = (currentScroll / totalHeight) * 100
 	}
-	
+
 	// Определяем направление прокрутки
 	if (currentScroll > lastScrollTop.value) {
 		scrollDirection.value = 'down'
 	} else {
 		scrollDirection.value = 'up'
 	}
-	
+
 	// Логика скрытия/показа хедера на мобильных
 	if (isMobile.value) {
 		if (scrollDirection.value === 'down' && currentScroll > 50) {
@@ -148,16 +137,16 @@ const handleScroll = () => {
 		} else if (scrollDirection.value === 'up') {
 			isHeaderHidden.value = false
 		}
-		
+
 		// Всегда показываем хедер в самом верху
 		if (currentScroll <= 50) {
 			isHeaderHidden.value = false
 		}
 	}
-	
+
 	// Флаг, что страница прокручена
 	isScrolled.value = currentScroll > 100
-	
+
 	// Обновляем позицию
 	lastScrollTop.value = currentScroll <= 0 ? 0 : currentScroll
 }
@@ -165,14 +154,14 @@ const handleScroll = () => {
 const scrollToTop = () => {
 	window.scrollTo({
 		top: 0,
-		behavior: 'smooth'
+		behavior: 'smooth',
 	})
 	isHeaderHidden.value = false
 }
 
 const handleResize = () => {
 	windowWidth.value = window.innerWidth
-	
+
 	// На десктопе всегда показываем хедер
 	if (!isMobile.value) {
 		isHeaderHidden.value = false
