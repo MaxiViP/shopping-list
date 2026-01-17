@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router'
 import './main.css'
 
+// Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
@@ -19,8 +20,15 @@ import {
 	faUndoAlt,
 	faChevronUp,
 	faChevronDown,
+	faList,
+	faTimes,
+	faCheckCircle,
+	faArrowLeft,
+	faPaperPlane,
+	faEnvelope,
 } from '@fortawesome/free-solid-svg-icons'
 
+// Регистрируем ВСЕ используемые иконки
 library.add(
 	faHeart,
 	faSearch,
@@ -33,7 +41,19 @@ library.add(
 	faPlus,
 	faUndoAlt,
 	faChevronUp,
-	faChevronDown
+	faChevronDown,
+	faList,
+	faTimes,
+	faCheckCircle,
+	faArrowLeft,
+	faPaperPlane,
+	faEnvelope
 )
 
-createApp(App).component('font-awesome-icon', FontAwesomeIcon).use(createPinia()).use(router).mount('#app')
+const app = createApp(App)
+
+app.component('font-awesome-icon', FontAwesomeIcon)
+app.use(createPinia())
+app.use(router)
+
+app.mount('#app')

@@ -7,7 +7,36 @@
             isScrolled ? 'shadow-md' : ''
         ]"
     >
-        <slot />
+        <div class="flex justify-between items-center">
+            <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 truncate pr-2">
+                Список покупок
+            </h1>
+            
+            <div class="flex items-center gap-3 sm:gap-4">
+                <router-link
+                    to="/history"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg transition-colors flex items-center gap-2 flex-shrink-0"
+                    title="История покупок"
+                >
+                    <font-awesome-icon icon="history" />
+                    <span class="hidden sm:inline">История покупок</span>
+                    <span class="sm:hidden">История</span>
+                </router-link>
+                
+                <span class="text-gray-600 hidden sm:block flex-shrink-0"> 
+                    Привет, {{ userStore.currentUser?.username }}! 
+                </span>
+                
+                <button
+                    @click="$emit('logout')"
+                    class="text-sm bg-gray-200 hover:bg-gray-300 px-2 sm:px-3 py-1 rounded-lg transition-colors flex-shrink-0"
+                    title="Выйти"
+                >
+                    <span class="hidden sm:inline">Выйти</span>
+                    <font-awesome-icon icon="sign-out-alt" class="sm:hidden" />
+                </button>
+            </div>
+        </div>
         
         <!-- Индикатор прокрутки -->
         <div v-if="isScrolled && !isHeaderHidden" class="mt-2">
@@ -33,6 +62,10 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useUserStore } from '../stores/userStore'
+
+const userStore = useUserStore()
+defineEmits(['logout'])
 
 const header = ref(null)
 let lastScrollTop = ref(0)
@@ -98,11 +131,5 @@ onMounted(() => {
 onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll)
     window.removeEventListener('resize', handleResize)
-})
-
-defineExpose({
-    scrollToTop,
-    isHeaderHidden,
-    isScrolled
 })
 </script>
