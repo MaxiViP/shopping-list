@@ -17,6 +17,8 @@ import {
 	faCheck,
 	faPlus,
 	faUndoAlt,
+	faChevronUp,
+	faChevronDown,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -29,7 +31,9 @@ library.add(
 	faRubleSign,
 	faCheck,
 	faPlus,
-	faUndoAlt
+	faUndoAlt,
+	faChevronUp,
+	faChevronDown
 )
 
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).use(createPinia()).use(router).mount('#app')
